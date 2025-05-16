@@ -4,9 +4,13 @@
   "description": "234 hire freelancing services",
   "main": "app.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "rimraf dist && npx tsc",
+    "prestart": "npm run build && node dist/app.js",
     "start": "node dist/app.js",
-    "dev": "npx tsc --watch & nodemon dist/app.js",
+    "predev": "npm run build",
+    "postdev": "nodemon dist/app.js",
+    "pretest": "npm run build",
+    "dev": "concurrently \"tsc --watch\" \"nodemon dist/app.js\"",
     "test": "jest --coverage"
   },
   "repository": {
@@ -22,6 +26,7 @@
   "dependencies": {
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.18",
+    "concurrently": "^9.1.2",
     "express": "^5.1.0",
     "rimraf": "^6.0.1",
     "typescript": "^5.8.3"
