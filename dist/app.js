@@ -3,15 +3,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
-// import { connectDB } from "./config/database";
+const database_1 = require("./config/database");
 // import routes from "./routes";
 // import { errorHandler } from "./middlewares/error.middleware";
 const app = (0, express_1.default)();
-// Connect to MongoDB
-// connectDB();
+//Connect to MongoDB
+(0, database_1.connectDB)();
 // Middleware
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
