@@ -6,14 +6,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // src/config/env.ts
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
-// Load environment variables from .env file
-dotenv_1.default.config({ path: path_1.default.resolve(__dirname, "../../.env") });
+// Load environment variables from .env file in project root
+// This works whether running from src/ or dist/
+const envPath = path_1.default.resolve(process.cwd(), ".env");
+console.log("📁 Loading .env from:", envPath);
+const result = dotenv_1.default.config({ path: envPath });
+if (result.error) {
+    console.warn("⚠️  Warning: Could not load .env file:", result.error.message);
+}
+else {
+    console.log("✅ Environment variables loaded successfully");
+}
 // Define and export environment variables with types
 const env = {
     NODE_ENV: process.env.NODE_ENV || "development",
-    PORT: parseInt(process.env.PORT || "5000", 10),
+    PORT: parseInt(process.env.PORT || "3000", 10),
     // MongoDB
-    MONGODB_URI: process.env.MONGODB_URI || "mongodb://localhost:27017/app_name",
+    MONGODB_URI: process.env.MONGODB_URI,
     // JWT
     JWT_SECRET: process.env.JWT_SECRET || "your_jwt_secret",
     JWT_EXPIRE: process.env.JWT_EXPIRE || "30d",
@@ -30,4 +39,6 @@ const env = {
     MAX_FILE_UPLOAD: parseInt(process.env.MAX_FILE_UPLOAD || "1000000", 10), // Default 1MB
     FILE_UPLOAD_PATH: process.env.FILE_UPLOAD_PATH || "public/uploads",
 };
+// Debug: Log the JWT_SECRET (first few characters only for security)
+console.log("🔑 JWT_SECRET loaded:", env.JWT_SECRET ? `${env.JWT_SECRET.substring(0, 10)}...` : "NOT FOUND");
 exports.default = env;

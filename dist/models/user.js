@@ -93,32 +93,32 @@ const UserSchema = new mongoose_1.Schema({
     },
     skills: {
         fashion: {
-            type: Boolean,
-            default: false,
+            type: String,
+            default: "",
         },
         graphicDesigner: {
-            type: Boolean,
-            default: false,
+            type: String,
+            default: "",
         },
         videoEditor: {
-            type: Boolean,
-            default: false,
+            type: String,
+            default: "",
         },
         contentCreator: {
-            type: Boolean,
-            default: false,
+            type: String,
+            default: "",
         },
         photographer: {
-            type: Boolean,
-            default: false,
+            type: String,
+            default: "",
         },
         writer: {
-            type: Boolean,
-            default: false,
+            type: String,
+            default: "",
         },
         others: {
-            type: Boolean,
-            default: false,
+            type: String,
+            default: "",
         },
     },
     resetPasswordToken: String,
@@ -145,12 +145,6 @@ UserSchema.pre("save", function (next) {
         }
     });
 });
-// Method to compare passwords
-UserSchema.methods.comparePassword = function (enteredPassword) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield bcryptjs_1.default.compare(enteredPassword, this.password);
-    });
-};
 // Generate and hash password token
 UserSchema.methods.getResetPasswordToken = function () {
     // Generate token
@@ -163,5 +157,11 @@ UserSchema.methods.getResetPasswordToken = function () {
     // Set expire time
     this.resetPasswordExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
     return resetToken;
+};
+// Sign JWT and return - using AuthService
+UserSchema.methods.getSignedJwtToken = function () {
+    // We'll handle token generation in the controller using AuthService
+    // This method just returns the user ID for now
+    return this._id.toString();
 };
 exports.User = mongoose_1.default.model("User", UserSchema);
